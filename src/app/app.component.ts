@@ -43,6 +43,7 @@ export class AppComponent implements AfterViewInit {
       !isNaN(this.days.nativeElement.innerText)
         ? (this.days.nativeElement.innerText = Math.floor(this.difference))
         : (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
+        //: (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
     }, 1000);
   }
 
