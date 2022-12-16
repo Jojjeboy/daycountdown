@@ -31,3 +31,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 https://stackblitz.com/edit/angular-countdown-timer-component-t2skhc?file=src%2Fapp%2Fapp.component.ts
 https://codepen.io/nzbin/pen/GGrXbp
+
+
+`ng build --output-path docs --base-href https://jojjeboy.github.io/daycountdown/ && git add . && git commit -m"Deploy of the latest and greatest" && git push`
