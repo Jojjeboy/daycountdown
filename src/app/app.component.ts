@@ -1,38 +1,38 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { formatDate } from "@angular/common";
+import { LOCALE_ID, Inject } from "@angular/core";
+import { of } from "rxjs";
+import { LocalStorageServiceService } from './local-storage-service';
+
+
 
 @Component({
   selector: 'my-app',
-  templateUrl: './app.component.html',
+  templateUrl: './app.component.html', 
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
+  
+  constructor(
+    @Inject(LOCALE_ID) public locale: string,
+    private localStorageService: LocalStorageServiceService) {};
+
   date: any;
   now: any;
-  targetDate: any = new Date(2023, 1, 13);
-  targetTime: any = this.targetDate.getTime();
+  defaultDateString: string = '2023-02-18';
+  targetDate: any = this.localStorageService.getDate(this.defaultDateString);
+  targetTime: any = this.localStorageService.getDate(this.defaultDateString).getTime();
   difference: number;
-  months: Array<string> = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  currentTime: any = `${
-    this.months[this.targetDate.getMonth()]
-  } ${this.targetDate.getDate()}, ${this.targetDate.getFullYear()}`;
+  inputDate: string;
+  dateFormat = "dd MMMM";
+  targetDate$ = of(formatDate(this.targetDate, this.dateFormat, this.locale));
 
-  @ViewChild('days', { static: true }) days: ElementRef;
-  @ViewChild('hours', { static: true }) hours: ElementRef;
-  @ViewChild('minutes', { static: true }) minutes: ElementRef;
-  @ViewChild('seconds', { static: true }) seconds: ElementRef;
+  @ViewChild('dagar', { static: true }) days: ElementRef;
+  @ViewChild('timmar', { static: true }) hours: ElementRef;
+
+  ngOnInit(){
+    this.getDate();
+  }
 
   ngAfterViewInit() {
     setInterval(() => {
@@ -42,9 +42,24 @@ export class AppComponent implements AfterViewInit {
 
       !isNaN(this.days.nativeElement.innerText)
         ? (this.days.nativeElement.innerText = Math.floor(this.difference))
-        : (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
-        //: (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
-    }, 1000);
+        : (this.days.nativeElement.innerHTML = `...>`);
+    }, 1);
+  }
+
+
+  public getDate() {
+    this.targetDate = this.localStorageService.getDate(this.defaultDateString);
+    
+  }
+
+  saveDate(value: any) {
+    console.log(value);
+    this.targetDate = new Date(value.inputDate);
+    this.targetTime = new Date(value.inputDate).getTime();
+    
+    this.localStorageService.saveDate(value.inputDate);
+    this.tickTock();
+    
   }
 
   tickTock() {
@@ -52,7 +67,5 @@ export class AppComponent implements AfterViewInit {
     this.now = this.date.getTime();
     this.days.nativeElement.innerText = Math.floor(this.difference);
     this.hours.nativeElement.innerText = 23 - this.date.getHours();
-    this.minutes.nativeElement.innerText = 60 - this.date.getMinutes();
-    this.seconds.nativeElement.innerText = 60 - this.date.getSeconds();
   }
 }
