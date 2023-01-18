@@ -14,9 +14,8 @@ export class AppComponent implements OnInit {
   now: any;
   targetDateString = '2023-02-18';
   targetDate: any = new Date(this.targetDateString);
-  targetTime: any = this.targetDate.getTime();
   difference: number;
-  inputDate: string;
+  inputDate: Date;
   today = new Date;
   dateFormat = "EEEE d MMMM";
   targetDate$ = of(formatDate(this.targetDate, this.dateFormat, this.locale));
@@ -29,24 +28,11 @@ export class AppComponent implements OnInit {
     ){}
   
   ngOnInit(): void {
-      const targetDate = this.getCountDownDate();
-      this.nrOfDays = this.calculateDiffrence(targetDate);
+      this.targetDate = this.getCountDownDate();
+      this.nrOfDays = this.calculateDiffrence(this.targetDate);
   }
 
   @ViewChild('days', { static: true }) days: ElementRef;
-
-
-
-  /* PÅ OnInit Hämta datum från en funktion som kan köras LS
-      Finns inte datumet, ta ett default date sparat här
-      Spara dagens datum i en variablel
-      Räkna ut skillnaden i datum
-      Visa upp skillnaden i vyn.
-
-  */
-
-
-
 
   getCountDownDate() : Date {
     let targetDate: any = this.localStorageService.getDate(this.targetDateString);
@@ -63,9 +49,7 @@ export class AppComponent implements OnInit {
   }
 
   saveDate(value: any) {
-    console.log(value);
     this.targetDate = new Date(value.inputDate);
-    this.targetTime = new Date(value.inputDate).getTime();
     
     this.localStorageService.saveDate(value.inputDate);
     this.nrOfDays = this.calculateDiffrence(this.targetDate);
