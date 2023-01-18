@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   inputDate: Date;
   today = new Date;
   dateFormat = "EEEE d MMMM";
-  targetDate$ = of(formatDate(this.targetDate, this.dateFormat, this.locale));
+  //targetDate$ = of(formatDate(this.targetDate, this.dateFormat, this.locale));
   public nrOfDays: number = 0;
 
   constructor(
