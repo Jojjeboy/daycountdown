@@ -7,7 +7,7 @@ export class LocalStorageServiceService {
   constructor() {
     if (window.hasOwnProperty('localStorage')) {
       if (localStorage.getItem(this.key) === null) {
-        localStorage.setItem(this.key, '0');
+        localStorage.setItem(this.key, '2023-02-18');
       }
     } else {
       window.alert('Please considering upgrading browser to be able to use Localstorage');
