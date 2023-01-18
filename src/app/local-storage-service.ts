@@ -28,9 +28,8 @@ export class LocalStorageServiceService {
     return new Date(lsValue);
   }
 
-  saveDate(dateString: string) {
-    let value:string = dateString;
-    this.writeLS(value);
+  saveDate(dateString: string): void {
+    this.writeLS(dateString);
   }
 
 

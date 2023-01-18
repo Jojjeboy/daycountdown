@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   
   ngOnInit(): void {
       const targetDate = this.getCountDownDate();
-      this.nrOfDays = this.calculateDiffrence(targetDate);
+      this.nrOfDays = this.calculateDiffrence(new Date(this.targetDateString));
   }
 
   @ViewChild('days', { static: true }) days: ElementRef;
