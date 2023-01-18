@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "daycountdown": {
+      "i18n": {
+        "sourceLocale": "sv-SE"
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {

@@ -1,17 +1,24 @@
 <div class="count-down-timer">
-  <p>Countdown to {{ currentTime }}</p>
+  <p>Nedräkning till {{ (targetDate) | date:dateFormat :'GMT':locale }} </p>
   <div class="wrapper">
-    <div class="description">
-      <p>Days</p>
-      <p>Hours</p>
-      <p>Minutes</p>
-      <p>Seconds</p>
-    </div>
     <div class="times">
-      <p #days></p>
-      <p #hours></p>
-      <p #minutes></p>
-      <p #seconds></p>
+      <p> {{ nrOfDays }} </p>
     </div>
+  </div>
+</div>
+
+
+<div class="count-down-timer">
+  <p>Ställ in datum</p>
+  <div class="wrapper">
+    <form #myForm="ngForm" (ngSubmit)="saveDate(myForm.value)">
+      <p>
+        <label>Datum att räkna ner till:</label>
+        <input type="date" min="{{today | date:'yyyy-MM-dd'}}" [(ngModel)]="inputDate" name="inputDate" required>
+      </p>
+      <p>
+        <button type="submit" [disabled]="!myForm.valid">Spara</button>
+      </p>
+    </form>
   </div>
 </div>

@@ -1,58 +1,77 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { formatDate } from "@angular/common";
+import { LOCALE_ID, Inject } from "@angular/core";
+import { of } from "rxjs";
+import { LocalStorageServiceService } from './local-storage-service';
 
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
   date: any;
   now: any;
-  targetDate: any = new Date(2023, 1, 13);
+  targetDateString = '2023-02-18';
+  targetDate: any = new Date(this.targetDateString);
   targetTime: any = this.targetDate.getTime();
   difference: number;
-  months: Array<string> = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  currentTime: any = `${
-    this.months[this.targetDate.getMonth()]
-  } ${this.targetDate.getDate()}, ${this.targetDate.getFullYear()}`;
+  inputDate: string;
+  today = new Date;
+  dateFormat = "EEEE d MMMM";
+  targetDate$ = of(formatDate(this.targetDate, this.dateFormat, this.locale));
+  public nrOfDays: number = 0;
 
-  @ViewChild('days', { static: true }) days: ElementRef;
-  @ViewChild('hours', { static: true }) hours: ElementRef;
-  @ViewChild('minutes', { static: true }) minutes: ElementRef;
-  @ViewChild('seconds', { static: true }) seconds: ElementRef;
-
-  ngAfterViewInit() {
-    setInterval(() => {
-      this.tickTock();
-      this.difference = this.targetTime - this.now;
-      this.difference = this.difference / (1000 * 60 * 60 * 24);
-
-      !isNaN(this.days.nativeElement.innerText)
-        ? (this.days.nativeElement.innerText = Math.floor(this.difference))
-        : (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
-        //: (this.days.nativeElement.innerHTML = `<img src="https://i.gifer.com/VAyR.gif" />`);
-    }, 1000);
+  constructor(
+    @Inject(LOCALE_ID) public locale: string,
+    private localStorageService: LocalStorageServiceService
+    
+    ){}
+  
+  ngOnInit(): void {
+      const targetDate = this.getCountDownDate();
+      this.nrOfDays = this.calculateDiffrence(targetDate);
   }
 
-  tickTock() {
-    this.date = new Date();
-    this.now = this.date.getTime();
-    this.days.nativeElement.innerText = Math.floor(this.difference);
-    this.hours.nativeElement.innerText = 23 - this.date.getHours();
-    this.minutes.nativeElement.innerText = 60 - this.date.getMinutes();
-    this.seconds.nativeElement.innerText = 60 - this.date.getSeconds();
+  @ViewChild('days', { static: true }) days: ElementRef;
+
+
+
+  /* PÅ OnInit Hämta datum från en funktion som kan köras LS
+      Finns inte datumet, ta ett default date sparat här
+      Spara dagens datum i en variablel
+      Räkna ut skillnaden i datum
+      Visa upp skillnaden i vyn.
+
+  */
+
+
+
+
+  getCountDownDate() : Date {
+    let targetDate: any = this.localStorageService.getDate(this.targetDateString);
+    return targetDate;
+  }
+
+  calculateDiffrence(targetDate: Date) : number{
+      // To calculate the time difference of two dates
+      let Difference_In_Time = targetDate.getTime() - new Date().getTime();
+      
+      // To calculate the no. of days between two dates
+      let Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
+
+      return Difference_In_Days;
+  }
+
+
+  saveDate(value: any) {
+    this.targetDate = new Date(value.inputDate);
+    this.targetTime = new Date(value.inputDate).getTime();
+
+    this.localStorageService.saveDate(value.inputDate);
+
+    this.nrOfDays = this.calculateDiffrence(new Date(value.inputDate));
+
+
   }
 }
