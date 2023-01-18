@@ -10,9 +10,6 @@ MIT
 @angular/forms
 MIT
 
-@angular/forms
-MIT
-
 @angular/localize
 MIT
 
