@@ -60,6 +60,7 @@ export class AppComponent implements OnInit {
       // To calculate the no. of days between two dates
       let Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
 
+      Difference_In_Days = isNaN(Difference_In_Days) ? 0 : Difference_In_Days;
       return Difference_In_Days;
   }
 
