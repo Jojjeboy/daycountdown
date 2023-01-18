@@ -6,7 +6,7 @@ import { LocalStorageServiceService } from './local-storage-service';
 
 @Component({
   selector: 'my-app',
-  templateUrl: './app.component.html',
+  templateUrl: './app.component.html', 
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
@@ -63,15 +63,13 @@ export class AppComponent implements OnInit {
       return Difference_In_Days;
   }
 
-
   saveDate(value: any) {
+    console.log(value);
     this.targetDate = new Date(value.inputDate);
     this.targetTime = new Date(value.inputDate).getTime();
-
+    
     this.localStorageService.saveDate(value.inputDate);
-
-    this.nrOfDays = this.calculateDiffrence(new Date(value.inputDate));
-
-
+    this.nrOfDays = this.calculateDiffrence(this.targetDate);
   }
+
 }
